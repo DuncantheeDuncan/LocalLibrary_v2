@@ -1,16 +1,17 @@
 
-
-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const { Sequelize } = require('sequelize');// for postgress
+
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
+// var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
 var compression = require('compression');
 var helmet = require('helmet');
 
@@ -18,7 +19,7 @@ var helmet = require('helmet');
 
 
 
-var app = express(); // -
+var app = express(); // ??
 
 app.use(compression()); //Compress all routes
 app.use(helmet());
@@ -30,6 +31,7 @@ var mongoDB = process.env.MANGO_CONNECT;
 mongoose.connect(mongoDB,{useNewUrlParser: true, useUnifiedTopology:true});
 var db = mongoose.connection;
 db.on('error',console.error.bind(console, 'MangoDB coonection error'));
+
 
 
 // view engine setup

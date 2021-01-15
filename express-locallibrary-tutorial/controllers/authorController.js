@@ -2,6 +2,8 @@
 var async = require('async');
 var Book = require('../models/book')
 var Author = require('../models/author');
+// I cannot require models of sequelize here
+
 
 const { body,validationResult } = require('express-validator');
 
@@ -12,6 +14,7 @@ exports.author_list = function(req, res, next) {
   .sort([['family_name', 'ascending']])
   .exec(function (err, list_authors) {
       if (err) { return next(err); }
+      // console.log(list_authors);
       //Successful, so render
       res.render('author_list', { title: 'Author List', author_list: list_authors });
   });
