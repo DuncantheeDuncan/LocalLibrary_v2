@@ -38,4 +38,4 @@ db.Sequelize = Sequelize;
 
 module.exports = db;
 
-//models/index.js
+//models/index.js https://github.com/DuncantheeDuncan
