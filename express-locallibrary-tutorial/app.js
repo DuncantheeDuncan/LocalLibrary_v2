@@ -5,13 +5,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { Sequelize } = require('sequelize');// for postgress
+const bodyParser = require('body-parser');
 
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
-// var catalogRouter = require('./routes/catalog');  //Import routes for "catalog" area of site
 var compression = require('compression');
 var helmet = require('helmet');
 
@@ -20,6 +20,10 @@ var helmet = require('helmet');
 
 
 var app = express(); // ??
+// app.get('*', (req, res) => res.status(200).send({
+	
+//   message: 'Welcome to the beginning of nothingness.',
+// }));
 
 app.use(compression()); //Compress all routes
 app.use(helmet());

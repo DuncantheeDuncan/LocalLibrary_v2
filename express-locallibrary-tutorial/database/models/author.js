@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     url: {
       type:DataTypes.VIRTUAL,
       get(){
-        return '/catolog/Author/${this.first_name}'
+        return '/catolog/author/${this.first_name}'// need to get a proper ID value
       }
     },
     name:{
@@ -24,11 +24,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
 
-  console.log("CONNECTED!!!");
+  
   
   Author.associate = function(models){
 
-    Author.hasMany(models.Books,{
+    Author.hasMany(models.Author,{
       foreignKey: 'authorId',
       as:'books',
       onDelete: 'CASCADE',
