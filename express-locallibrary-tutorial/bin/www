@@ -9,6 +9,12 @@ var app = require('../app');
 var debug = require('debug')('express-locallibrary-tutorial:server');
 var http = require('http');
 
+/**
+ * Automaticaly sync models and schema
+ */
+
+// var models = require('../database/models'); // gives an erro, mybe
+// it is because it already been included in database/models/index  26
 
 /**
  * Get port from environment and store in Express.

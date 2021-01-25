@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
+const { User, Blog, Tag } = require('./sequelize')
 const envConfigs =  require('../config/config');
 // const config = require(__dirname + '/../config/config.js')[env];
 

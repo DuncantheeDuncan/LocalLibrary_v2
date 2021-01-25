@@ -1,26 +1,63 @@
 
 var async = require('async');
-var Book = require('../database/models/book')// create a model
-var Author = require('../database/models/author');
-// I cannot require models of sequelize here
+// var Book = require('../models/book')// MongoDB
+// var Author = require('../models/author');// MongoDB
 
-// message: 'Welcome to the beginning of nothingness.',
+var Book = require('../database/models/book')// postgresql
+var Author = require('../database/models/author');
+// var User = require('../database/models/author')(sequelize, DataTypes);
+const Sequelize = require('sequelize');
+
 
 const { body,validationResult } = require('express-validator');
+
+// Author.findAll({
+//   where: {
+//     age: 8,
+//   }
+// });
+
 
 // Display list of all Authors. -//
 exports.author_list = function(req, res, next) {
 
-  Author.find()
-  .sort([['family_name', 'ascending']])
-  .exec(function (err, list_authors) {
-      if (err) { return next(err); }
-      // console.log(list_authors);
-      //Successful, so render
-      res.render('author_list', { title: 'Author List', author_list: list_authors });
+
+  // Author.find()
+  // .sort([['family_name', 'ascending']])
+  // .exec(function (err, list_authors) {
+  //     if (err) { return next(err); }
+  //     // console.log(list_authors);
+  //     //Successful, so render
+  //     res.render('author_list', { title: 'Author List', author_list: list_authors });
+  // });
+
+// res.send('NOT IMPLEMENTED: Author list');
+
+// Author.findAll({
+//   attributes:['first_name']
+// },{raw:true}).then(function(authors){
+//   console.log(authors);
+// });
+
+
+// -------------------
+
+// -------------------
+console.log('authors');
+Author.findAll().then(function(authors){
+
+  res.render('author_list',{
+    title:'makersBnB',
+    authors: authors
   });
 
+});
+
+
+
 };
+
+
 
 // Display detail page for a specific Author.
 // exports.author_detail = function(req, res, next) {
