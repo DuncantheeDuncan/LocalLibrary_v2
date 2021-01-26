@@ -5,12 +5,12 @@
 const { body,validationResult } = require('express-validator');
 const Sequelize = require('sequelize');
 var Book = require('../database/models/book')// postgresql
-var Author = require('../database/models/author');
+// var Author = require('../database/models/author');
 // var User = require('../database/models/author')(sequelize, DataTypes);
 
 
-const models_a = require( '../database/models/index');
-
+const models = require( '../database/models/');
+const Author = models.Author;
 
 
 
@@ -51,7 +51,7 @@ exports.author_list = function(req, res, next) {
 
 // -------------------
 console.log('authors');
-models_a.Authors.findAll().then(function(authors){
+Author.findAll().then(function(authors){
 
   res.render('author_list',{
     title:'makersBnB',
