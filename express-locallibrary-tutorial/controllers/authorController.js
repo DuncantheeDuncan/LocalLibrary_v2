@@ -1,27 +1,34 @@
 
-var async = require('async');
+// var async = require('async');
 // var Book = require('../models/book')// MongoDB
 // var Author = require('../models/author');// MongoDB
-
+const { body,validationResult } = require('express-validator');
+const Sequelize = require('sequelize');
 var Book = require('../database/models/book')// postgresql
 var Author = require('../database/models/author');
 // var User = require('../database/models/author')(sequelize, DataTypes);
-const Sequelize = require('sequelize');
 
 
-const { body,validationResult } = require('express-validator');
+const models_a = require( '../database/models/index');
 
-// Author.findAll({
-//   where: {
-//     age: 8,
-//   }
-// });
+
+
+
+                  // module.exports = {
+                  //   author_list(req,res){
+                  //     console.log('aah '+Authors);
+                  //     // return Authors.findAll()
+                  //     // .sort([['family_name', 'ascending']])
+                  //   }
+                  // };
+
 
 
 // Display list of all Authors. -//
 exports.author_list = function(req, res, next) {
 
 
+// findAll();
   // Author.find()
   // .sort([['family_name', 'ascending']])
   // .exec(function (err, list_authors) {
@@ -44,7 +51,7 @@ exports.author_list = function(req, res, next) {
 
 // -------------------
 console.log('authors');
-Author.findAll().then(function(authors){
+models_a.Authors.findAll().then(function(authors){
 
   res.render('author_list',{
     title:'makersBnB',
@@ -258,5 +265,5 @@ Author.findAll().then(function(authors){
 routes/catalog.js:6:25)
 authorController.js:3:12)
 
-
+https://groundberry.github.io/development/2016/11/06/continue-building-your-node-app-with-express-and-sequelize.html
     e*/
