@@ -4,25 +4,14 @@
 // var Author = require('../models/author');// MongoDB
 const { body,validationResult } = require('express-validator');
 const Sequelize = require('sequelize');
-var Book = require('../database/models/book')// postgresql
+// var Book = require('../database/models/book')// postgresql
 // var Author = require('../database/models/author');
 // var User = require('../database/models/author')(sequelize, DataTypes);
 
 
-const models = require( '../database/models/');
-const Author = models.Author;
-
-
-
-                  // module.exports = {
-                  //   author_list(req,res){
-                  //     console.log('aah '+Authors);
-                  //     // return Authors.findAll()
-                  //     // .sort([['family_name', 'ascending']])
-                  //   }
-                  // };
-
-
+var models = require( '../database/models/');
+var Author = models.Author;
+var Book = models.Book;
 
 // Display list of all Authors. -//
 exports.author_list = function(req, res, next) {

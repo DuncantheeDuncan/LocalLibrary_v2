@@ -1,10 +1,12 @@
 
-const { DataTypes,Model } = require("sequelize");
-const Sequelize = require('sequelize');
+const { Sequelize,DataTypes,Model } = require("sequelize");
+// const Sequelize = require('sequelize');
+// const sequelize = new Sequelize("postgres::memory:");
 
 
-module.exports = (sequelize, DataTypes) => {
-  var Author = sequelize.define('Author',{
+
+const author = (sequelize, DataTypes) => {
+      var Author = sequelize.define('Author',{
 
     first_name:DataTypes.STRING,
     family_name:DataTypes.STRING,
@@ -57,4 +59,5 @@ module.exports = (sequelize, DataTypes) => {
   // };
  
 };
-
+module.exports = author;
+ // export default author;
