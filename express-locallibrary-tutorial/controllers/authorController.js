@@ -17,8 +17,8 @@ var Book = models.Book;
 exports.author_list = function(req, res, next) {
 
 
-// findAll();
-  // Author.find()
+
+  // Author.findAll()
   // .sort([['family_name', 'ascending']])
   // .exec(function (err, list_authors) {
   //     if (err) { return next(err); }
@@ -29,23 +29,22 @@ exports.author_list = function(req, res, next) {
 
 // res.send('NOT IMPLEMENTED: Author list');
 
-// Author.findAll({
+// Author.findAll({//
 //   attributes:['first_name']
 // },{raw:true}).then(function(authors){
 //   console.log(authors);
 // });
 
 
-// -------------------
 
-// -------------------
-console.log('authors');
 Author.findAll().then(function(authors){
-
+// console.log(authors);// success log
   res.render('author_list',{
-    title:'makersBnB',
-    authors: authors
+    title:'Author List',
+    author_list: authors
   });
+        // res.render('author_list', { title: 'Author List', author_list: authors });
+
 
 });
 
