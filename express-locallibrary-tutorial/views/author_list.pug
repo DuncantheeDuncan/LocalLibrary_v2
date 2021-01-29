@@ -2,17 +2,21 @@
 extends layout
 
 block content
-  h1= title
+	h1= title
 
-  ul
-    each author in author_list
-      li
-        //a(href=author.url) #{author.name}
-        //|  (#{author.date_of_birth_formatted} - //#{author.date_of_death_formatted})
-        #{author.first_name}
-        #{author.family_name}
-        #{author.date_of_death}
-        #{author.date_of_birth}
+	ul
+		each article, i in articles
+			li=article.first_name
+			
 
-    else
-      li There are no authors.
+	ul
+		each list_aurthor, i in author_list
+			li=list_aurthor.first_name
+			//li={list_aurthor.name}
+	ul
+		each movie_names, i in movies
+			li=movie_names.movie_name
+
+	ul
+		each na, i in name
+			li=na

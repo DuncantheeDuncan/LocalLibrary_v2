@@ -31,21 +31,66 @@ exports.author_list = function(req, res, next) {
 
 // Author.findAll({//
 //   attributes:['first_name']
+
 // },{raw:true}).then(function(authors){
 //   console.log(authors);
+//   res.render('author_list', { title: 'Author List Phumlani', author_list: authors });
 // });
 
 
 
-Author.findAll().then(function(authors){
+Author.findAll().then(function(author_list){
 // console.log(authors);// success log
+let articles =[
+{
+  // id:1,
+  first_name:'phulani',
+  family_name:'mthembu'
+},
+{
+  // id:2,
+  first_name:'phulani2',
+  family_name:'mthembu2'
+},
+{
+  // id:3,
+  first_name:'phulani3',
+  family_name:'mthembu3'
+},
+];
+
+let movies =[
+{
+  // id:1,
+  movie_name:'Ishu Lova',
+  
+},
+{
+  // id:2,
+  movie_name:'marvels',
+  
+},
+{
+  // id:3,
+  movie_name:'Uzalo',
+  
+},
+];
+let name = [];
+
+for(var i=0; i<author_list.length; i++){
+  // console.log(author_list[i].first_name +' '+ author_list[i].family_name);
+  name += new Array(author_list[i].family_name +' '+ author_list[i].first_name+',');
+}
+console.log(name.split(','));
   res.render('author_list',{
     title:'Author List',
-    author_list: authors
+    articles: articles,
+    author_list:author_list,
+    movies:movies,
+    name:name.split(',')
   });
         // res.render('author_list', { title: 'Author List', author_list: authors });
-
-
 });
 
 
