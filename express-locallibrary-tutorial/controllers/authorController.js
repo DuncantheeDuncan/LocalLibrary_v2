@@ -13,7 +13,9 @@ var models = require( '../database/models/');
 var Author = models.Author;
 var Book = models.Book;
 
-// Display list of all Authors. -//
+
+
+// Display list of all Authors.
 exports.author_list = function(req, res, next) {
 
 
@@ -41,54 +43,58 @@ exports.author_list = function(req, res, next) {
 
 Author.findAll().then(function(author_list){
 // console.log(authors);// success log
-let articles =[
-{
-  // id:1,
-  first_name:'phulani',
-  family_name:'mthembu'
-},
-{
-  // id:2,
-  first_name:'phulani2',
-  family_name:'mthembu2'
-},
-{
-  // id:3,
-  first_name:'phulani3',
-  family_name:'mthembu3'
-},
-];
+// let articles =[
+// {
+//   // id:1,
+//   first_name:'phulani',
+//   family_name:'mthembu'
+// },
+// {
+//   // id:2,
+//   first_name:'phulani2',
+//   family_name:'mthembu2'
+// },
+// {
+//   // id:3,
+//   first_name:'phulani3',
+//   family_name:'mthembu3'
+// },
+// ];
 
-let movies =[
-{
-  // id:1,
-  movie_name:'Ishu Lova',
+// let movies =[
+// {
+//   // id:1,
+//   movie_name:'Ishu Lova',
   
-},
-{
-  // id:2,
-  movie_name:'marvels',
+// },
+// {
+//   // id:2,
+//   movie_name:'marvels',
   
-},
-{
-  // id:3,
-  movie_name:'Uzalo',
+// },
+// {
+//   // id:3,
+//   movie_name:'Uzalo',
   
-},
-];
-let name = [];
+// },
+// ];
+let list_authors = [];
+
 
 for(var i=0; i<author_list.length; i++){
   // console.log(author_list[i].first_name +' '+ author_list[i].family_name);
-  name += new Array(author_list[i].family_name +' '+ author_list[i].first_name+',');
+  // console.log(author_list[i].id);
+  list_authors += new Array(author_list[i].family_name +' '+ author_list[i].first_name+',');
 }
-console.log(name.split(','));
+// console.log(list_authors.split(','));
+console.log(author_list);
   res.render('author_list',{
     title:'Author List',
-    articles: articles,
+    names_list:list_authors.split(','),
+    // articles: articles,
     author_list:author_list,
-    movies:movies,
-    name:name.split(',')
+    // movies:movies,
+    
   });
         // res.render('author_list', { title: 'Author List', author_list: authors });
 });

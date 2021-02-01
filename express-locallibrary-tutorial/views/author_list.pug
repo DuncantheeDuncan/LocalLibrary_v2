@@ -4,19 +4,14 @@ extends layout
 block content
 	h1= title
 
-	ul
-		each article, i in articles
-			li=article.first_name
-			
+	a(href='www.google.es') www
+
 
 	ul
-		each list_aurthor, i in author_list
-			li=list_aurthor.first_name
-			//li={list_aurthor.name}
-	ul
-		each movie_names, i in movies
-			li=movie_names.movie_name
+		each names, i in names_list
+			li= names
 
 	ul
-		each na, i in name
-			li=na
+		each list_authors, i in author_list
+			//li=list_authors.first_name
+			li a(href=www.google.es) www
