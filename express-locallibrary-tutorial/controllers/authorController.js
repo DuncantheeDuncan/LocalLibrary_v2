@@ -1,5 +1,5 @@
 
-// var async = require('async');
+var async = require('async');
 // var Book = require('../models/book')// MongoDB
 // var Author = require('../models/author');// MongoDB
 const { body,validationResult } = require('express-validator');
@@ -18,87 +18,38 @@ var Book = models.Book;
 // Display list of all Authors.
 exports.author_list = function(req, res, next) {
 
+  Author.findAll().then(function(author_list){
 
-
-  // Author.findAll()
-  // .sort([['family_name', 'ascending']])
-  // .exec(function (err, list_authors) {
-  //     if (err) { return next(err); }
-  //     // console.log(list_authors);
-  //     //Successful, so render
-  //     res.render('author_list', { title: 'Author List', author_list: list_authors });
-  // });
-
-// res.send('NOT IMPLEMENTED: Author list');
-
-// Author.findAll({//
-//   attributes:['first_name']
-
-// },{raw:true}).then(function(authors){
-//   console.log(authors);
-//   res.render('author_list', { title: 'Author List Phumlani', author_list: authors });
-// });
-
-
-
-Author.findAll().then(function(author_list){
-// console.log(authors);// success log
-// let articles =[
+// let list_authors = [];
+// let links =[
 // {
-//   // id:1,
-//   first_name:'phulani',
-//   family_name:'mthembu'
+//   link : "www.google.com",
+//   text:'one twi'
 // },
 // {
-//   // id:2,
-//   first_name:'phulani2',
-//   family_name:'mthembu2'
-// },
-// {
-//   // id:3,
-//   first_name:'phulani3',
-//   family_name:'mthembu3'
-// },
+//   link :"www.youtube.com",
+//   text:'one three'
+// }
+// ,{
+//   link : "http://localhost:3000/catalog",
+//   text:'one four'
+// }
 // ];
+// console.log('links '+links[0].link);
+// for(var i=0; i<author_list.length; i++){
+//   list_authors += new Array(
+//     author_list[i].family_name +' '+
+//     author_list[i].first_name+
+//     ' ('+ author_list[i].date_of_birth+' - '+ author_list[i].date_of_death+')'
+//     +',');
+// }
 
-// let movies =[
-// {
-//   // id:1,
-//   movie_name:'Ishu Lova',
-  
-// },
-// {
-//   // id:2,
-//   movie_name:'marvels',
-  
-// },
-// {
-//   // id:3,
-//   movie_name:'Uzalo',
-  
-// },
-// ];
-let list_authors = [];
-
-
-for(var i=0; i<author_list.length; i++){
-  // console.log(author_list[i].first_name +' '+ author_list[i].family_name);
-  // console.log(author_list[i].id);
-  list_authors += new Array(author_list[i].family_name +' '+ author_list[i].first_name+',');
-}
-// console.log(list_authors.split(','));
-console.log(author_list);
   res.render('author_list',{
     title:'Author List',
-    names_list:list_authors.split(','),
-    // articles: articles,
+    // names_list:list_authors.split(','),
     author_list:author_list,
-    // movies:movies,
-    
   });
-        // res.render('author_list', { title: 'Author List', author_list: authors });
 });
-
 
 
 };
@@ -106,29 +57,32 @@ console.log(author_list);
 
 
 // Display detail page for a specific Author.
-// exports.author_detail = function(req, res, next) {
+exports.author_detail = function(req, res, next) {
+// res.send('NOT IMPLEMENTED: Author details');
 
-//     async.parallel({
-//         author: function(callback) {
-//             Author.findById(req.params.id)
-//             .exec(callback)
-//         },
-//         authors_books: function(callback) {
-//           Book.find({ 'author': req.params.id },'title summary')
-//           .exec(callback)
-//       },
-//   }, function(err, results) {
-//         if (err) { return next(err); } // Error in API usage.
-//         if (results.author==null) { // No results.
-//             var err = new Error('Author not found');
-//             err.status = 404;
-//             return next(err);
-//         }
-//         // Successful, so render.
-//         res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
-//     });
+    async.parallel({
+        author: function(callback) {
+          // console.log(Author.findById(req.params.id));
+            // Author.findById(req.params.id)
+            // .exec(callback);
+  
+        },
+  //       authors_books: function(callback) {
+  //         Book.find({ 'author': req.params.id },'title summary')
+  //         .exec(callback)
+  //     },
+  // }, function(err, results) {
+  //       if (err) { return next(err); } // Error in API usage.
+  //       if (results.author==null) { // No results.
+  //           var err = new Error('Author not found');
+  //           err.status = 404;
+  //           return next(err);
+  //       }
+  //       // Successful, so render.
+  //       res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
+    });
 
-// };
+};
 
 // Display Author create form on GET.
 // exports.author_create_get = function(req, res, next) {

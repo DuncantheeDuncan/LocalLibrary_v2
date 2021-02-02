@@ -4,14 +4,14 @@ extends layout
 block content
 	h1= title
 
-	a(href='www.google.es') www
-
-
 	ul
-		each names, i in names_list
-			li= names
-
-	ul
+	
 		each list_authors, i in author_list
-			//li=list_authors.first_name
-			li a(href=www.google.es) www
+			li
+				- let name =list_authors.family_name +', '+list_authors.first_name;
+				- let date = '('+ list_authors.date_of_birth + ' - '+  list_authors.date_of_death + ')';
+
+				a(href='/catalog/author/'+list_authors.id) #{name}
+				|   #{date})
+
+				// next to format the dates

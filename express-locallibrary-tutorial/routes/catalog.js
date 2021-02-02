@@ -66,7 +66,7 @@ router.get('/books', book_controller.book_list);
 // // router.post('/author/:id/update', author_controllerv2.author_update_post);
 
 // // GET request for one Author.
-// router.get('/author/:id', author_controller.author_detail);
+router.get('/author/:id', author_controller.author_detail);
 
 
 // GET request for list of all Authors.
