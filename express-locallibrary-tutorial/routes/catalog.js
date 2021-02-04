@@ -16,7 +16,7 @@ router.get('/', book_controller.index);
 // router.get('/v2', book_controller.index);
 
 // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
-router.get('/book/create', book_controller.book_create_get);
+// router.get('/book/create', book_controller.book_create_get);
 
 // POST request for creating Book.
 // router.post('/book/create', book_controller.book_create_post);
@@ -42,12 +42,11 @@ router.get('/books', book_controller.book_list);
 /// AUTHOR ROUTES ///
 
 // GET request for creating Author. NOTE This must come before route for id (i.e. display author).
-// router.get('/author/create', author_controller.author_create_get);
-// router.get('/author/create', author_controllerv2.author_create_get);
+router.get('/author/create', author_controller.author_create_get);
 
 // POST request for creating Author.
-// router.post('/author/create', author_controller.author_create_post);
-// router.post('/author/create', author_controllerv2.author_create_post);
+router.post('/author/create', author_controller.author_create_post);
+
 
 // // GET request to delete Author.
 // router.get('/author/:id/delete', author_controller.author_delete_get);

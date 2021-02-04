@@ -17,41 +17,12 @@ var Book = models.Book;
 
 // Display list of all Authors.
 exports.author_list = function(req, res, next) {
-
   Author.findAll().then(function(author_list){
-
-// let list_authors = [];
-// let links =[
-// {
-//   link : "www.google.com",
-//   text:'one twi'
-// },
-// {
-//   link :"www.youtube.com",
-//   text:'one three'
-// }
-// ,{
-//   link : "http://localhost:3000/catalog",
-//   text:'one four'
-// }
-// ];
-// console.log('links '+links[0].link);
-// for(var i=0; i<author_list.length; i++){
-//   list_authors += new Array(
-//     author_list[i].family_name +' '+
-//     author_list[i].first_name+
-//     ' ('+ author_list[i].date_of_birth+' - '+ author_list[i].date_of_death+')'
-//     +',');
-// }
-
-  res.render('author_list',{
-    title:'Author List',
-    // names_list:list_authors.split(','),
-    author_list:author_list,
+    res.render('author_list',{
+      title:'Author List',
+      author_list:author_list,
+    });
   });
-});
-
-
 };
 
 
@@ -60,34 +31,76 @@ exports.author_list = function(req, res, next) {
 exports.author_detail = function(req, res, next) {
 // res.send('NOT IMPLEMENTED: Author details');
 
-    async.parallel({
-        author: function(callback) {
-          // console.log(Author.findById(req.params.id));
-            // Author.findById(req.params.id)
-            // .exec(callback);
-  
-        },
-  //       authors_books: function(callback) {
-  //         Book.find({ 'author': req.params.id },'title summary')
-  //         .exec(callback)
-  //     },
-  // }, function(err, results) {
-  //       if (err) { return next(err); } // Error in API usage.
-  //       if (results.author==null) { // No results.
-  //           var err = new Error('Author not found');
-  //           err.status = 404;
-  //           return next(err);
-  //       }
+async.parallel({
+    author: function(callback) {
+        Author.findByPk(req.params.id).then(
+            function(value) {
+                callback(null, value);
+            },
+            function(err) {
+                callback(err);
+            }
+        );
+    }
+    
+
+},
+function(err, results) {
+//     console.log('whoo');
+        if (err) { return next(err); } // Error in API usage.
+        if (results.author==null) { // No results.
+            var err = new Error('Author not found');
+            err.status = 404;
+            return next(err);
+        }
   //       // Successful, so render.
-  //       res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
-    });
+        res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
+});
+// )
+
+// async.parallel({
+//   author: function(callback) {
+ 
+//             Author.findOne({
+//               where: {
+//                 id:req.params.id
+//               }
+//             })
+//             // LAST STOP
+
+//             // .exec(callback); // for postgresql this is no neces
+
+//           },
+//         authors_books: function(callback) {
+//           // Book.findOne({ 'author': req.params.id },'title summary')
+//           Book.findOne({
+//             where:{
+//               'author':req.params.id 
+//             }
+//           })
+//           // .exec(callback)
+//           console.log('entered')
+//       },
+//   }, 
+
+//   function(err, results) {
+// //     console.log('whoo');
+// //         if (err) { return next(err); } // Error in API usage.
+// //         if (results.author==null) { // No results.
+// //             var err = new Error('Author not found');
+// //             err.status = 404;
+// //             return next(err);
+// //         }
+// //   //       // Successful, so render.
+// //         res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
+// // });
 
 };
 
 // Display Author create form on GET.
-// exports.author_create_get = function(req, res, next) {
-//     res.render('author_form', { title: 'Create Author'});
-// };
+exports.author_create_get = function(req, res, next) {
+    res.render('author_form', { title: 'Create Author'});
+};
 
 
 // Display Author delete form on GET.
@@ -161,47 +174,50 @@ exports.author_detail = function(req, res, next) {
 
 
 // Handle Author create on POST.
-// exports.author_create_post = [ // square brackets
+exports.author_create_post = [ // square brackets
 
-//     // Validate and sanitise fields.
-//     body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
-//     .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-//     body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
-//     .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-//     body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
-//     body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+    // Validate and sanitise fields.
+    body('first_name').trim().isLength({ min: 2 }).escape().withMessage('First name must be specified.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
+    .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+    body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+    body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
 
-//     // Process request after validation and sanitization.
-//     (req, res, next) => {
+    // Process request after validation and sanitization.
+    (req, res, next) => {
 
-//         // Extract the validation errors from a request.
-//         const errors = validationResult(req);
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
 
-//         if (!errors.isEmpty()) {
-//             // There are errors. Render form again with sanitized values/errors messages.
-//             res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
-//             return;
-//         }
-//         else {
-//             // Data from form is valid.
 
-//             // Create an Author object with escaped and trimmed data.
-//             var author = new Author(
-//             {
-//                 first_name: req.body.first_name,
-//                 family_name: req.body.family_name,
-//                 date_of_birth: req.body.date_of_birth,
-//                 date_of_death: req.body.date_of_death
-//             });
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/errors messages.
+            res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
+            return;
+        }
+        else {
 
-//             author.save(function (err) {
-//                 if (err) { return next(err); }
-//                 // Successful - redirect to new author record.
-//                 res.redirect(author.url);
-//             });
-//         }
-//     }
-//     ];
+            // Data from form is valid.
+
+            // Create an Author object with escaped and trimmed data.
+            var author = new Author(
+            {
+                first_name: req.body.first_name,
+                family_name: req.body.family_name,
+                date_of_birth: req.body.date_of_birth,
+                date_of_death: req.body.date_of_death
+            });
+
+            author.save(function (err) {
+                if (err) { return next(err); }
+                // Successful - redirect to new author record.
+                res.redirect(author.url);
+            });
+        console.log(req.body.first_name);
+        }
+    }
+    ];
 
 
 // Handle Author update on POST.
@@ -251,12 +267,3 @@ exports.author_detail = function(req, res, next) {
 
 
 
-
-    /*
-    Cannot find module '..database/models/book'
-
-routes/catalog.js:6:25)
-authorController.js:3:12)
-
-https://groundberry.github.io/development/2016/11/06/continue-building-your-node-app-with-express-and-sequelize.html
-    e*/
