@@ -41,7 +41,24 @@ async.parallel({
                 callback(err);
             }
         );
-    }
+    },
+    // author_books : function(callback) {
+
+      // Book.findOne({
+      //   where:{
+      //     author:req.params.id
+      //   }
+      // }).then(function(value){callback(null,value);},function(err){callback(err)})
+
+      // Book.findOne({where:{author: req.params.id }},'title summary').then(function(value){callback(null,value);},function(err){callback(err)})
+    // }
+    // authors_books: function(callback) {
+    //   Book.findOne({
+    //         where:{
+    //           'author':req.params.id 
+    //         }
+    //       })
+    // }
     
 
 },
@@ -53,8 +70,11 @@ function(err, results) {
             err.status = 404;
             return next(err);
         }
+
+        // console.log(results.author_books.title + ' Wowowo');
   //       // Successful, so render.
-        res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
+  res.render('author_detail', { title: 'Author Detail', author: results.author} );
+        // res.render('author_detail', { title: 'Author Detail', author: results.author, author_books: results.authors_books } );
 });
 // )
 
@@ -96,6 +116,9 @@ function(err, results) {
 // // });
 
 };
+
+
+
 
 // Display Author create form on GET.
 exports.author_create_get = function(req, res, next) {

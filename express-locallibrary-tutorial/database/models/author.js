@@ -1,5 +1,5 @@
 
-const { Sequelize,DataTypes,Model } = require("sequelize");
+const {Sequelize,DataTypes,Model} = require("sequelize");
 
 const author = (sequelize, DataTypes) => {
   var Author = sequelize.define('Author',{

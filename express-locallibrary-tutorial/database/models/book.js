@@ -1,17 +1,12 @@
+const {Sequelize,DataTypes,Model} = require("sequelize");
 
-const {Model} = require('sequelize');
-
-
-module.exports = (sequelize, DataTypes) => {
-
+const book = (sequelize, DataTypes) => {
 var Book = sequelize.define('Book',{
+
     title: DataTypes.TEXT,
     author: DataTypes.TEXT,
     summary: DataTypes.TEXT('long'),
     isbn: DataTypes.STRING,
-//     genre: DataTypes.ENUM({
-//   values: ['Fantasy', 'French Poetry','Romance','Horro','Science Fiction']
-// }),
     genre: {
       type: DataTypes.ENUM,
       values: ['Fantasy', 'French Poetry','Romance','Horro','Science Fiction'],
@@ -28,5 +23,6 @@ var Book = sequelize.define('Book',{
   });
 
   return Book;
-
 };
+
+module.exports =book;
