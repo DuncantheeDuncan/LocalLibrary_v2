@@ -57,12 +57,10 @@ router.post('/author/create', author_controller.author_create_post);
 // // router.post('/author/:id/delete', author_controllerv2.author_delete_post);
 
 // // GET request to update Author.
-// router.get('/author/:id/update', author_controller.author_update_get);
-// // router.get('/author/:id/update', author_controllerv2.author_update_get);
+router.get('/author/:id/update', author_controller.author_update_get);
 
 // // POST request to update Author.
-// router.post('/author/:id/update', author_controller.author_update_post);
-// // router.post('/author/:id/update', author_controllerv2.author_update_post);
+router.post('/author/:id/update', author_controller.author_update_post);
 
 // // GET request for one Author.
 router.get('/author/:id', author_controller.author_detail);
