@@ -12,7 +12,7 @@ block content
     dl
       if authors_books !== null
         each book, i in  authors_books
-          dt #{book.title}
+          dt #{book.title}// href='/catalog/author/'+author.id
           dd #{book.summary}
       else
         p This author has no books.
