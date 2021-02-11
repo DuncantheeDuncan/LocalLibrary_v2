@@ -23,6 +23,6 @@ block content
 
     form(method='POST' action='')
       div.form-group
-        input#authorid.form-control(type='false',name='authorid', required='true', value=author.id )
+        input#authorid.form-control(type='hidden',name='authorid', required='true', value=author.id )
 
       button.btn.btn-primary(type='submit') Delete

@@ -59,24 +59,20 @@ exports.author_detail = function(req, res, next) {
 };
 
 
-
-
-// Display Author create form on GET.
+// Display Author create form on GET. -
 exports.author_create_get = function(req, res, next) {
   res.render('author_form', { title: 'Create Author'});
 };
 
 
-// Display Author delete form on GET.
+// Display Author delete form on GET. -
 exports.author_delete_get = function(req, res, next) {
 
     async.parallel({
         author: function(callback) {
-            // Author.findByPk(req.params.id).exec(callback)
             Author.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
         },
         authors_books: function(callback) {
-          // Book.find({ 'author': req.params.id }).exec(callback)
            Book.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
       },
   }, function(err, results) {
@@ -84,7 +80,7 @@ exports.author_delete_get = function(req, res, next) {
         if (results.author==null) { // No results.
             res.redirect('/catalog/authors');
         }
-        console.log(results.author_books+ ' books');
+        
         // Successful, so render.
         res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
     });
@@ -92,39 +88,31 @@ exports.author_delete_get = function(req, res, next) {
 };
 
 
-// Handle Author delete on POST.
+// Handle Author delete on POST. -
 exports.author_delete_post = function(req, res, next) {
-// res.send('NOT IMPLEMENTED: update form on get');// still here
     async.parallel({
         author: function(callback) {
-          // Author.findById(req.body.authorid).exec(callback)
           Author.findByPk(/*req.params.id*/req.body.authorid).then(function(value) {callback(null, value);},function(err){callback(err);});
       },
       authors_books: function(callback) {
-          // Book.find({ 'author': req.body.authorid }).exec(callback)
           Book.findByPk(/*req.params.id*/req.body.authorid).then(function(value) {callback(null, value);},function(err){callback(err);});
       },
   }, function(err, results) {
     if (err) { return next(err); }
         // Success
         
-        // if (results.authors_books.length > 0) {
-        //   console.log(results.authors_books.length +" @#$%^&*((*&^%$#@#$%^");
-        //   res.send('NOT IMPLEMENTED: update form on get');// still here
-        //     // Author has books. Render in same way as for GET route.
-        //     res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
-        //     return;
-        // }
-        // else {
-            // Author has no books. Delete object and redirect to the list of authors.
-            // Author.findByIdAnRemove(req.body.authorid, function deleteAuthor(err) {
-              // Author.destroy(req.body.authorid, function deleteAuthor(err) {
-              Author.destroy({where:{id: req.body.authorid }}, function deleteAuthor(err) {
-                if (err) { return next(err); }//{where:{author: req.params.id }},
-                // Success - go to author list
+        if (results.authors_books =null) {
+            // Author has books. Render in same way as for GET route.
+
+            res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
+            return;
+        }
+        else {
+            // Author has no books. Delete object and redirect to the list of authors.  
+              Author.destroy({where:{id:req.body.authorid}}).then(function(){
                 res.redirect('/catalog/authors')
-            })
-        // }
+              })
+        }
     });
 };
 
@@ -164,11 +152,11 @@ exports.author_update_get = function (req, res, next) {
   };
 
 
-// Handle Author create on POST.
-exports.author_create_post = [ // square brackets
+// Handle Author create on POST. -
+exports.author_create_post = [
 
     // Validate and sanitise fields.
-    body('first_name').trim().isLength({ min: 2 }).escape().withMessage('First name must be specified.')
+    body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
     .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
     body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
     .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
@@ -181,14 +169,12 @@ exports.author_create_post = [ // square brackets
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values/errors messages.
             res.render('author_form', { title: 'Create Author', author: req.body, errors: errors.array() });
             return;
           }
           else {
-
             // Data from form is valid.
 
             // Create an Author object with escaped and trimmed data.
@@ -199,33 +185,30 @@ exports.author_create_post = [ // square brackets
               date_of_birth: req.body.date_of_birth,
               date_of_death: req.body.date_of_death
             });
+            
+            author.save().then(function(){
+              res.redirect('/catalog/author/'+author.id);
+            })
 
-            author.save(function (err) {
-              if (err) { return next(err); }
-                // Successful - redirect to new author record.
-                res.redirect(author.url);
-              });
-            console.log(req.body.first_name);
           }
         }
         ];
 
 
 // Handle Author update on POST.
-exports.author_update_post = [
+exports.author_update_post = [// LAST STOP
 
     // Validate and santize fields.
-    // body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
-    // .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-    // body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
-    // .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
-    // body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
-    // body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
+    body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('family_name').trim().isLength({ min: 1 }).escape().withMessage('Family name must be specified.')
+    .isAlphanumeric().withMessage('Family name has non-alphanumeric characters.'),
+    body('date_of_birth', 'Invalid date of birth').optional({ checkFalsy: true }).isISO8601().toDate(),
+    body('date_of_death', 'Invalid date of death').optional({ checkFalsy: true }).isISO8601().toDate(),
 
 
     // Process request after validation and sanitization.
     (req, res, next) => {
-      // res.send('NOT IMPLEMENTED: Author details two');
 
         // Extract the validation errors from a request.
         const errors = validationResult(req);
@@ -247,13 +230,6 @@ exports.author_update_post = [
             return;
           }
           else {
-            // Data from form is valid. Update the record.
-            // Author.findByIdAndUpdate(req.params.id, author, {}, function (err, theauthor) {
-            //     if (err) { return next(err); }
-            //     // Successful - redirect to genre detail page.
-            //     res.redirect(theauthor.url);
-            // });
-            console.log(req.body.date_of_death+' what is isnide');
             Author.update(
             // Values to update
             {
@@ -268,7 +244,7 @@ exports.author_update_post = [
             }
           }
           ).then(count => { 
-            console.log('Rows updated ' + count); 
+            // console.log('Rows updated ' + count); 
             res.redirect('/catalog/author/'+req.params.id); });
         }
       }
