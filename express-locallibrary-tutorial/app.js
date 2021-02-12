@@ -19,7 +19,9 @@ var helmet = require('helmet');
 
 
 
-var app = express(); // ??
+var app = express();
+app.locals.moment = require('moment');
+
 // app.get('*', (req, res) => res.status(200).send({
 	
 //   message: 'Welcome to the beginning of nothingness.',
