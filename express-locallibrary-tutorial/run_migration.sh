@@ -1,4 +1,4 @@
 # 2
 # running the migration to translate migration
-# into tables inn the database
+# into tables into the database
 sequelize db:migrate
