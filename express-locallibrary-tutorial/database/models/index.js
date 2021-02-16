@@ -12,7 +12,6 @@ const config = envConfigs[env];
 let sequelize;
 if (config.url) {
   sequelize = new Sequelize(config.url, config);
-  console.log('SE '+ config.port);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 };
@@ -30,6 +29,8 @@ sequelize
 const db = {
   Author: require('./author')(sequelize, Sequelize),
   Book: require('./book')(sequelize, Sequelize),
+  Bookinstance: require('./bookinstance')(sequelize, Sequelize),
+  Genre: require('./genre')(sequelize, Sequelize),
 
 };
 

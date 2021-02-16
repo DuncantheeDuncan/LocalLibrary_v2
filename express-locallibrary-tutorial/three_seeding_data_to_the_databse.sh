@@ -1,8 +1,8 @@
 
 #3
 
-# seending data to databse on a newly created file
+# seending data to database on a newly created file
 # sequelize seed:generate --name Author
 # sequelize seed:generate --name Book
-sequelize seed:generate --name bookinstance
-
+# sequelize seed:generate --name Bookinstance
+# sequelize seed:generate --name Genre

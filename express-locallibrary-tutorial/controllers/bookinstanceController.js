@@ -1,22 +1,38 @@
 // var BookInstance = require('../models/bookinstance');
-// const { body,validationResult } = require('express-validator');
-// const Sequelize = require('sequelize');
+var async = require('async');
+const { body,validationResult } = require('express-validator');
+const Sequelize = require('sequelize');
 
-// var models = require( '../database/models/');
-// var Book = models.Book;
+var models = require( '../database/models/');
+var Bookinstance = models.Bookinstance;
+var Book = models.Book;
 
-// // Display list of all BookInstances.
-// exports.bookinstance_list = function(req, res, next) {
+// Display list of all BookInstances.
+exports.bookinstance_list = function(req, res, next) {
+	Bookinstance.findAll().then(function(list_bookinstances){
 
-//   BookInstance.find()
-//   .populate('book')
-//   .exec(function (err, list_bookinstances) {
-//     if (err) { return next(err); }
-//       // Successful, so render
-//       res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances });
-//     });
+console.log('id  '+ list_bookinstances.id+'\n'+
+	'book '+list_bookinstances.book+'\n'+
+	'imprint '+list_bookinstances.imprint+'\n'+
+	'duebck '+list_bookinstances.due_back+'\n'+
+	'status '+list_bookinstances.status
 
-// };
+
+	);
+// res.send('yeye');
+  res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances });
+});
+
+  // Bookinstance.find()
+  // .populate('book')
+  // .exec(function (err, list_bookinstances) {
+  //   if (err) { return next(err); }
+  //     // Successful, so render
+
+  //     // res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances });
+  //   });
+
+};
 
 // // Display detail page for a specific BookInstance.
 // exports.bookinstance_detail = function(req, res, next) {

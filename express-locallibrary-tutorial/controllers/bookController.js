@@ -8,7 +8,7 @@ var models = require( '../database/models/');
 var Book = models.Book;
 var Author = models.Author;
 var Genre = models.Genre;
-var BookInstance = models.BookInstance;
+var Bookinstance = models.Bookinstance;
 
 
 
@@ -40,23 +40,12 @@ async.parallel({
 exports.book_list = function(req, res, next) {
 
 Book.findAll().then(function(list_books){
-// console.log('list books '+ list_books);
+
   res.render('book_list',{
     title:'Book List',
     book_list:list_books,
   });
 });
-
-
-// Book.find({}, 'title author')
-//   .populate('author')
-//   .exec(function (err, list_books) {
-//       console.log('title author');
-//     if (err) { return next(err); }
-//     //Successful, so render
-//     res.render('book_list', { title: 'Book List', book_list: list_books });
-//   });
-
 };
 
 // Display detail page for a specific book.
@@ -72,7 +61,7 @@ Book.findByPk(req.params.id).then(function(value) {callback(null, value);},funct
     },
     book_instance: function(callback) {
 
-    BookInstance.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
+    Bookinstance.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
 
     //   // BookInstance.find({ 'book': req.params.id })
     //   // .exec(callback);
@@ -84,7 +73,7 @@ Book.findByPk(req.params.id).then(function(value) {callback(null, value);},funct
         err.status = 404;
         return next(err);
     }
-    console.log('what is inside ' +results.book);
+    
     // Successful, so render.
     res.render('book_detail', { title: results.book.title, book: results.book, book_instances: results.book_instance } );
 });
@@ -241,15 +230,22 @@ exports.book_update_get = function(req, res, next) {
 // Get book, authors and genres for form.
 async.parallel({
     book: function(callback) {
-        Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+        console.log('enters');
+        // Book.findByPk(req.params.id).populate('author').populate('genre').exec(callback);
+        Book.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
+        console.log('exits');
     },
     authors: function(callback) {
-        Author.find(callback);
+        // Author.find(callback);
+        Author.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
     },
     genres: function(callback) {
-        Genre.find(callback);
+        // Genre.find(callback);
+        Genre.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
+
     },
     }, function(err, results) {
+        console.log('genre '+ results.genres.name)
         if (err) { return next(err); }
         if (results.book==null) { // No results.
             var err = new Error('Book not found');
@@ -260,7 +256,7 @@ async.parallel({
         // Mark our selected genres as checked.
         for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
             for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
-                if (results.genres[all_g_iter]._id.toString()===results.book.genre[book_g_iter]._id.toString()) {
+                if (results.genres[all_g_iter].id.toString()===results.book.genre[book_g_iter].id.toString()) {
                     results.genres[all_g_iter].checked='true';
                 }
             }
@@ -269,6 +265,8 @@ async.parallel({
     });
 
 };
+
+
 
 // Handle book update on POST.
 exports.book_update_post = [

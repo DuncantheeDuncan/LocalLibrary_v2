@@ -1,7 +1,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert(
-    'bookinstances',
+    'Bookinstances',
     [
       {
         book: 'The Name of the Wind (The Kingkiller Chronicle, #1)',
@@ -23,5 +23,5 @@ module.exports = {
     ],
     {},
   ),
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Books', null, {}),
+  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Bookinstances', null, {}),
 };

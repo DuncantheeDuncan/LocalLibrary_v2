@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('bookinstances', {
+    await queryInterface.createTable('Bookinstances', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       book: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT('long')
       },
       imprint: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT('long')
       },
       due_back: {
         type: Sequelize.DATE
@@ -21,8 +21,6 @@ module.exports = {
         type: Sequelize.ENUM,
         values:['Available', 'Maintenance', 'Loaned', 'Reserved'],
         default: 'Maintenance'
-
-
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +33,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('bookinstances');
+    await queryInterface.dropTable('Bookinstances');
   }
 };

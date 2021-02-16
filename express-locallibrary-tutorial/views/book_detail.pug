@@ -5,31 +5,33 @@ block content
   h1 #{title}: #{book.title}
 
   p #[strong Author:]
-    a(href=book.author.url) #{book.author.name}
+    a(href='/catalog/bookinstance/'+book.id) #{book.author}
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
   p #[strong Genre:]
     each val, index in book.genre
-      a(href=val.url) #{val.name}
-      if index < book.genre.length - 1
-        |,
+
+      a(href='catalog/genre/'+book.id) #{val}
+        if index < book.genre.length - 1
+          |
 
   div(style='margin-left:20px;margin-top:20px')
     h4 Copies
 
-    each val in book_instances
-      hr
-      if val.status=='Available'
-        p.text-success #{val.status}
-      else if val.status=='Maintenance'
-        p.text-danger #{val.status}
-      else
-        p.text-warning #{val.status}
-      p #[strong Imprint:] #{val.imprint}
-      if val.status!='Available'
-        p #[strong Due back:] #{val.due_back}
-      p #[strong Id:]
-        a(href=val.url) #{val._id}
+    if book_instances !== null
+      each val in book_instances
+        hr
+        if val.status=='Available'
+          p.text-success #{val.status}
+        else if val.status=='Maintenance'
+          p.text-danger #{val.status}
+        else
+          p.text-warning #{val.status}
+        p #[strong Imprint:] #{val.imprint}
+        if val.status!='Available'
+          p #[strong Due back:] #{val.due_back}
+        p #[strong Id:]
+          a(href='/catalog/bookinstance/') #{val.id}
 
     else
       p There are no copies of this book in the library.
@@ -37,7 +39,7 @@ block content
     hr
 
     p
-      a(href=book.url+'/update') Update Book
+      a(href='/catalog/book/'+book.id+'/update') Update Book
       
     p
-    a(href=book.url+'/delete') Delete Book
+    a(href='/catalog/book/'+book.id+'/delete') Delete Book 
