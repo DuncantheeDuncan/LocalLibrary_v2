@@ -9,32 +9,45 @@ block content
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
   p #[strong Genre:]
-    each val, index in book.genre
+    //- each val in book.genre
+    //-   //- p #{val}
+    //-   //- - let genString = val + val
 
-      a(href='catalog/genre/'+book.id) #{val}
-        if index < book.genre.length - 1
-          |
+    //-   a(href='catalog/genre/'+book.id) #{genString}
+    //-   //-   if index <val.length - 1
+    //-   //- | ,
 
   div(style='margin-left:20px;margin-top:20px')
     h4 Copies
 
-    if book_instances !== null
-      each val in book_instances
+    if book_instances === null
+      p There are no copies of this book in the library.
+
+    else
+      each val, index in book_instances
         hr
         if val.status=='Available'
           p.text-success #{val.status}
+
         else if val.status=='Maintenance'
           p.text-danger #{val.status}
+
         else
           p.text-warning #{val.status}
+
         p #[strong Imprint:] #{val.imprint}
         if val.status!='Available'
           p #[strong Due back:] #{val.due_back}
         p #[strong Id:]
           a(href='/catalog/bookinstance/') #{val.id}
 
-    else
-      p There are no copies of this book in the library.
+        
+
+
+
+
+     
+
 
     hr
 

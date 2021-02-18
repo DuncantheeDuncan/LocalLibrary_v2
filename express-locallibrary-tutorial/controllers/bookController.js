@@ -15,21 +15,36 @@ var Bookinstance = models.Bookinstance;
 exports.index = function(req, res) {   
 
 async.parallel({
-    // book_count: function(callback) {
-    //     // Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
-    // },
-    // book_instance_count: function(callback) {
-    //     // BookInstance.countDocuments({}, callback);
-    // },
-    // book_instance_available_count: function(callback) {
-    //     // BookInstance.countDocuments({status:'Available'}, callback);
-    // },
-    // author_count: function(callback) {
-    //     Author.countDocuments({}, callback);
-    // },
-    // genre_count: function(callback) {
-    //     Genre.countDocuments({}, callback);
-    // }
+    book_count: function(callback) {
+        // Book.countDocuments({}, callback); // Pass an empty object as match condition to find all documents of this collection
+        models.Book.count().then(count =>{
+            callback(null,count);
+        })
+    },
+    book_instance_count: function(callback) {
+        // BookInstance.countDocuments({}, callback);
+         models.Bookinstance.count().then(count =>{
+            callback(null,count);
+        })
+    },
+    book_instance_available_count: function(callback) {
+        // BookInstance.countDocuments({status:'Available'}, callback);
+        models.Bookinstance.count().then(count =>{
+            callback(null,count);
+        })
+    },
+    author_count: function(callback) {
+        // Author.countDocuments({}, callback);
+        models.Author.count().then(count =>{
+            callback(null,count);
+        })
+    },
+    genre_count: function(callback) {
+        // Genre.countDocuments({}, callback);
+        models.Genre.count().then(count =>{
+            callback(null,count);
+        })
+    }
 }, function(err, results) {
     res.render('index', { title: 'Local Library Home', error: err, data: results });
 });
@@ -40,7 +55,7 @@ async.parallel({
 exports.book_list = function(req, res, next) {
 
 Book.findAll().then(function(list_books){
-
+console.log('test book '+ list_books[0].author)
   res.render('book_list',{
     title:'Book List',
     book_list:list_books,
@@ -240,27 +255,40 @@ async.parallel({
         Author.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
     },
     genres: function(callback) {
-        // Genre.find(callback);
+        // Genre.findByPk(req.params.id);
         Genre.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
+       // Genre.findAll({
+       //      // limit: 2,
+       //      where: {
+       //          //your where conditions, or without them if you need ANY entry
+       //      },
+       //          order: [ [ 'createdAt', 'DESC' ]]
+       //      })
+       // .then(function(entries){
+       //          //only difference is that you get users list limited to 1
+       //      //entries[0]
+       //      console.log('XxXxX '+ entries);
+       //      }); 
 
     },
     }, function(err, results) {
-        console.log('genre '+ results.genres.name)
+        
         if (err) { return next(err); }
         if (results.book==null) { // No results.
             var err = new Error('Book not found');
             err.status = 404;
             return next(err);
         }
+        // console.log('genre '+ results.genres.name)
         // Success.
         // Mark our selected genres as checked.
-        for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
-            for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
-                if (results.genres[all_g_iter].id.toString()===results.book.genre[book_g_iter].id.toString()) {
-                    results.genres[all_g_iter].checked='true';
-                }
-            }
-        }
+        // for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
+        //     for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
+        //         if (results.genres[all_g_iter].id.toString()===results.book.genre[book_g_iter].id.toString()) {
+        //             results.genres[all_g_iter].checked='true';
+        //         }
+        //     }
+        // }
         res.render('book_form', { title: 'Update Book', authors: results.authors, genres: results.genres, book: results.book });
     });
 
@@ -325,7 +353,8 @@ body('genre.*').escape(),
                     results.genres[i].checked='true';
                 }
             }
-            res.render('book_form', { title: 'Update Book',authors: results.authors, genres: results.genres, book: book, errors: errors.array() });
+            // res.render('book_form', { title: 'Update Book',authors: results.authors, genres: results.genres, book: book, errors: errors.array() });
+            res.send('now accessing new function!!')
         });
         return;
     }
