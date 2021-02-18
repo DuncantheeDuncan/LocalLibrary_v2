@@ -11,14 +11,14 @@ var Book = models.Book;
 exports.bookinstance_list = function(req, res, next) {
 	Bookinstance.findAll().then(function(list_bookinstances){
 
-console.log('id  '+ list_bookinstances.id+'\n'+
-	'book '+list_bookinstances.book+'\n'+
-	'imprint '+list_bookinstances.imprint+'\n'+
-	'duebck '+list_bookinstances.due_back+'\n'+
-	'status '+list_bookinstances.status
+// console.log('id  '+ list_bookinstances.id+'\n'+
+// 	'book '+list_bookinstances.book+'\n'+
+// 	'imprint '+list_bookinstances.imprint+'\n'+
+// 	'duebck '+list_bookinstances.due_back+'\n'+
+// 	'status '+list_bookinstances.status
 
 
-	);
+// 	);
 // res.send('yeye');
   res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: list_bookinstances });
 });
@@ -35,22 +35,74 @@ console.log('id  '+ list_bookinstances.id+'\n'+
 };
 
 // // Display detail page for a specific BookInstance.
-// exports.bookinstance_detail = function(req, res, next) {
+exports.bookinstance_detail = function(req, res, next) {
 
-//   BookInstance.findById(req.params.id)
-//   .populate('book')
-//   .exec(function (err, bookinstance) {
+//    async.parallel({
+//       bookinstance: function(callback) {
+//         Bookinstance.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
+//       },
+//       bookinstance_title: function(callback) {
+//        Book.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
+//      },
+//    },function(err, results) {
 //     if (err) { return next(err); }
-//       if (bookinstance==null) { // No results.
+//      if (results.bookinstance==null) { // No results.
 //         var err = new Error('Book copy not found');
 //         err.status = 404;
 //         return next(err);
 //       }
-//       // Successful, so render.
-//       res.render('bookinstance_detail', { title: 'Copy: '+bookinstance.book.title, bookinstance:  bookinstance});
-//     })
 
-// };
+// console.log('--> '+results.bookinstance.id +' --> ')
+
+//       // res.render('bookinstance_detail', { title: 'Copy: '+bookinstance.book.title, bookinstance:  results.bookinstance, title_copy:results.bookinstance_title});
+//       res.render('bookinstance_detail', { bookinstance: results.bookinstance});
+
+//    });
+
+
+
+  // Bookinstance.findById(req.params.id)
+  // .populate('book')
+  // .exec(function (err, bookinstance) {
+  //   if (err) { return next(err); }
+  //     if (bookinstance==null) { // No results.
+  //       var err = new Error('Book copy not found');
+  //       err.status = 404;
+  //       return next(err);
+  //     }
+  //     // Successful, so render.
+  //     res.render('bookinstance_detail', { title: 'Copy: '+bookinstance.book.title, bookinstance:  bookinstance});
+  //   })
+
+  Bookinstance.findByPk(req.params.id).then(bookinstance => {
+    if(err) { return next(err)}
+      if (bookinstance ==null) {
+        var err = new Error('BookInstance not found');
+        err.status = 404;
+        return next(err);
+      }
+      // console.log(bookinstance.book.title +' <-- what')
+      // res.render('bookinstance_detail', { title: 'Copy: '+bookinstance.book.title, bookinstance:  bookinstance});
+       res.render('bookinstance_detail', { bookinstance: bookinstance});
+
+  })
+
+//   Bookinstance.findOne({
+//     where : { id : req.params.id },
+//     include : {model : Book}
+// }).then(bookinstance => {
+//     if(err) { return next(err)}
+//       if (bookinstance ==null) {
+//         var err = new Error('BookInstance not found');
+//         err.status = 404;
+//         return next(err);
+//       }
+//       console.log(bookinstance.book.title +' <-- what')
+//       // res.render('bookinstance_detail', { title: 'Copy: '+bookinstance.book.title, bookinstance:  bookinstance});
+
+//   })
+
+};
 
 // // Display BookInstance create form on GET.
 // exports.bookinstance_create_get = function(req, res, next) {

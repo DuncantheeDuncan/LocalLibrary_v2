@@ -78,16 +78,16 @@ router.get('/genre/create', genre_controller.genre_create_get);
 router.post('/genre/create', genre_controller.genre_create_post);
 
 // // GET request to delete Genre.
-// router.get('/genre/:id/delete', genre_controller.genre_delete_get);
+router.get('/genre/:id/delete', genre_controller.genre_delete_get);
 
 // // POST request to delete Genre.
-// router.post('/genre/:id/delete', genre_controller.genre_delete_post);
+router.post('/genre/:id/delete', genre_controller.genre_delete_post);
 
 // // GET request to update Genre.
-// router.get('/genre/:id/update', genre_controller.genre_update_get);
+router.get('/genre/:id/update', genre_controller.genre_update_get);
 
 // // POST request to update Genre.
-// router.post('/genre/:id/update', genre_controller.genre_update_post);
+router.post('/genre/:id/update', genre_controller.genre_update_post);
 
 // // GET request for one Genre.
 router.get('/genre/:id', genre_controller.genre_detail);
@@ -117,7 +117,7 @@ router.get('/genres', genre_controller.genre_list);
 // router.post('/bookinstance/:id/update', book_instance_controller.bookinstance_update_post);
 
 // // GET request for one BookInstance.
-// router.get('/bookinstance/:id', book_instance_controller.bookinstance_detail);
+router.get('/bookinstance/:id', book_instance_controller.bookinstance_detail);
 
 // GET request for list of all BookInstance.
 router.get('/bookinstances', book_instance_controller.bookinstance_list);

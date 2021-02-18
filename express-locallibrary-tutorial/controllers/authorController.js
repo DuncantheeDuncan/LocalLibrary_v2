@@ -39,6 +39,7 @@
           }
 
           // Successful, so render.
+          console.log('check '+results.author_books)
           res.render('author_detail', {author: results.author, authors_books: results.author_books });
         });
   };

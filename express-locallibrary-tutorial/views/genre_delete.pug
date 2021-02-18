@@ -4,7 +4,7 @@ block content
 
   h1 Delete Genre: #{genre.name}
   
-  if genre_books.length
+  if genre_books !== null
   
     p #[strong Delete the following books before attempting to delete this genre.]
   
@@ -15,7 +15,7 @@ block content
       dl
       each book in genre_books
         dt 
-          a(href=book.url) #{book.title}
+          a(href='/catalog/book/'+book.id) #{book.title}
         dd #{book.summary}
 
   else
