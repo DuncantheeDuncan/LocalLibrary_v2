@@ -14,7 +14,8 @@ block content
         else
           span.text-warning #{val.status}
         if val.status!='Available'
-          span  (Due: #{val.due_back} )
+          span  (Due: #{moment(val.due_back).format('DD MMM YYYY')} )
+          
 
     else
       li There are no book copies in this library.

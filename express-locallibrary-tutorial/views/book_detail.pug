@@ -8,17 +8,23 @@ block content
     a(href='/catalog/bookinstance/'+book.id) #{book.author}
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
+
+  - let genre_name='';
+    each val in book.genre
+      - genre_name += val.replace(/[}:{'"]+/g, '')
+
+
   p #[strong Genre:]
-    //- each val in book.genre
-    //-   //- p #{val}
-    //-   //- - let genString = val + val
+    - let genre_names = genre_name.split(',');
+    - for(let i=0; i<genre_names.length; i++)
+        a(href='/catalog/genre/'+book.id) #{genre_names[i].replace(- 1)}   
+        |,
+        
+    
 
-    //-   a(href='catalog/genre/'+book.id) #{genString}
-    //-   //-   if index <val.length - 1
-    //-   //- | ,
-
+  
   div(style='margin-left:20px;margin-top:20px')
-    h4 Copies
+    h4 Copies STILL NEED TO FIX THE LOOP!
 
     if book_instances === null
       p There are no copies of this book in the library.
@@ -28,18 +34,30 @@ block content
         hr
         if val.status=='Available'
           p.text-success #{val.status}
-
         else if val.status=='Maintenance'
           p.text-danger #{val.status}
 
         else
           p.text-warning #{val.status}
+      
 
-        p #[strong Imprint:] #{val.imprint}
-        if val.status!='Available'
-          p #[strong Due back:] #{val.due_back}
-        p #[strong Id:]
-          a(href='/catalog/bookinstance/') #{val.id}
+    //- else
+    //-   each val, index in book_instances
+    //-     hr
+    //-     if val.status=='Available'
+    //-       p.text-success #{val.status}
+
+    //-     else if val.status=='Maintenance'
+    //-       p.text-danger #{val.status}
+
+    //-     else
+    //-       p.text-warning #{val.status}
+
+    //-     p #[strong Imprint:] #{val.imprint}
+    //-     if val.status!='Available'
+    //-       p #[strong Due back:] #{val.due_back}
+    //-     p #[strong Id:]
+    //-       a(href='/catalog/bookinstance/') #{val.id}
 
         
 
