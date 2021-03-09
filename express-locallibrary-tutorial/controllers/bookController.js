@@ -52,7 +52,7 @@ exports.index = function(req, res) {
 
 
 // Display list of all books.
-exports.book_list = function(req, res, next) {
+exports.book_list = function(req, res, next) {// -
 
     Book.findAll().then(function(list_books){
         console.log('test book '+ list_books[0].author)
@@ -64,7 +64,7 @@ exports.book_list = function(req, res, next) {
 };
 
 // Display detail page for a specific book.
-exports.book_detail = function(req, res, next) {
+exports.book_detail = function(req, res, next) {// -
 
     async.parallel({
         book: function(callback) {
@@ -96,8 +96,8 @@ if (err) { return next(err); }
 };
 
 
-// Display book create form on GET. -
-exports.book_create_get = function(req, res, next) {
+// Display book create form on GET. 
+exports.book_create_get = function(req, res, next) {// -
 // res.send('connected');
 // Get all authors and genres, which we can use for adding to our book.
 async.parallel({
@@ -120,8 +120,8 @@ async.parallel({
 
 };
 
-// Handle book create on POST. -
-exports.book_create_post = [
+// Handle book create on POST. 
+exports.book_create_post = [//-
 
 // Convert the genre to an array.
 (req, res, next) => {
@@ -181,22 +181,25 @@ body('genre.*').escape(),
     }
     else {
         // Data from form is valid. Save book.
-        book.save();
-        res.redirect('/catalog/books/');
-        //TODO get an Id to redirect to
+        
+        book.save().then(function(){
+            res.redirect('/catalog/book/'+book.id);
+        })
 }
 }
 ];
 
 // Display book delete form on GET.
-exports.book_delete_get = function(req, res) { // - git
+exports.book_delete_get = function(req, res) { //-
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            // Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            Book.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
         },
         book_bookinstances: function(callback) {
-            BookInstance.find({ 'book': req.params.id }).exec(callback);
+            // Bookinstance.find({ 'book': req.params.id }).exec(callback);
+            Bookinstance.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
         },
     }, function(err, results) {
         if (err) { return next(err); }
@@ -215,10 +218,12 @@ exports.book_delete_post = function(req, res, next) {
 
 async.parallel({
     book: function(callback) {
-        Book.findById(req.body.id).populate('author').populate('genre').exec(callback);
+        // Book.findById(req.body.id).populate('author').populate('genre').exec(callback);
+         Book.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
     },
     book_bookinstances: function(callback) {
-        BookInstance.find({ 'book': req.body.id }).exec(callback);
+        // BookInstance.find({ 'book': req.body.id }).exec(callback);
+         Bookinstance.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
     },
 }, function(err, results) {
     if (err) { return next(err); }
@@ -230,11 +235,16 @@ async.parallel({
     }
     else {
         // Book has no BookInstance objects. Delete object and redirect to the list of books.
-        Book.findByIdAndRemove(req.body.id, function deleteBook(err) {
-            if (err) { return next(err); }
-            // Success - got to books list.
-            res.redirect('/catalog/books');
-        });
+        // Book.findByIdAndRemove(req.body.id, function deleteBook(err) {
+        //     if (err) { return next(err); }
+        //     // Success - got to books list.
+        //     res.redirect('/catalog/books');
+        // });
+// res.send("gets in")
+
+         Book.destroy({where:{id:req.params.id}}).then(function(){
+                res.redirect('/catalog/books')
+              })
 
     }
 });
@@ -244,35 +254,33 @@ async.parallel({
 
 
 // Display book update form on GET.
-exports.book_update_get = function(req, res, next) {
+exports.book_update_get = function(req, res, next) {// -
 
 // Get book, authors and genres for form.
 async.parallel({
     book: function(callback) {
-        console.log('enters');
         // Book.findByPk(req.params.id).populate('author').populate('genre').exec(callback);
         Book.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
-        console.log('exits');
     },
-    authors: function(callback) {
-        // Author.find(callback);
+    author: function(callback) {
         Author.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
     },
     genres: function(callback) {
-        // Genre.findByPk(req.params.id);
-        Genre.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
-       // Genre.findAll({
-       //      // limit: 2,
-       //      where: {
-       //          //your where conditions, or without them if you need ANY entry
-       //      },
-       //          order: [ [ 'createdAt', 'DESC' ]]
-       //      })
-       // .then(function(entries){
-       //          //only difference is that you get users list limited to 1
-       //      //entries[0]
-       //      console.log('XxXxX '+ entries);
-       //      }); 
+//         // Genre.findByPk(req.params.id);
+//         Genre.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
+//        // Genre.findAll({
+//        //      // limit: 2,
+//        //      where: {
+//        //          //your where conditions, or without them if you need ANY entry
+//        //      },
+//        //          order: [ [ 'createdAt', 'DESC' ]]
+//        //      })
+//        // .then(function(entries){
+//        //          //only difference is that you get users list limited to 1
+//        //      //entries[0]
+//        //      console.log('XxXxX '+ entries);
+            // }); 
+            Genre.findByPk(req.params.id /*req.body.authorid*/).then(function(value) {callback(null, value);},function(err){callback(err);});
 
    },
 }, function(err, results) {
@@ -283,17 +291,29 @@ if (err) { return next(err); }
             err.status = 404;
             return next(err);
         }
-        // console.log('genre '+ results.genres.name)
+
+        console.log('genre '+ results.genres.name.length +' '+results.book.genre.length)
         // Success.
         // Mark our selected genres as checked.
-        // for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
-        //     for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
-        //         if (results.genres[all_g_iter].id.toString()===results.book.genre[book_g_iter].id.toString()) {
-        //             results.genres[all_g_iter].checked='true';
-        //         }
-        //     }
-        // }
-        res.render('book_form', { title: 'Update Book', authors: results.authors, genres: results.genres, book: results.book });
+        for (var all_g_iter = 0; all_g_iter < results.genres.length; all_g_iter++) {
+            for (var book_g_iter = 0; book_g_iter < results.book.genre.length; book_g_iter++) {
+                if (results.genres[all_g_iter].id.toString()===results.book.genre[book_g_iter].id.toString()) {
+                    results.genres[all_g_iter].checked='true';
+                    console.log('WORKS ->>')
+                }
+            }
+        }
+
+
+        res.render(
+            'book_form',
+            {
+            title: 'Update Book',
+            author: results.author, 
+            genres: results.genres, 
+            book: results.book  
+        });
+
     });
 
 };
@@ -301,10 +321,12 @@ if (err) { return next(err); }
 
 
 // Handle book update on POST.
-exports.book_update_post = [
+exports.book_update_post = [//-
+
 
 // Convert the genre to an array
 (req, res, next) => {
+
     if(!(req.body.genre instanceof Array)){
         if(typeof req.body.genre==='undefined')
             req.body.genre=[];
@@ -314,14 +336,15 @@ exports.book_update_post = [
     next();
 },
 
+
 // Validate and sanitise fields.
-body('title', 'Title must not be empty.').trim().isLength({ min: 1 }).escape(),
+body('title', 'Title must not be empty.').trim().isLength({ min: 3 }).escape(),
 body('author', 'Author must not be empty.').trim().isLength({ min: 1 }).escape(),
 body('summary', 'Summary must not be empty.').trim().isLength({ min: 1 }).escape(),
 body('isbn', 'ISBN must not be empty').trim().isLength({ min: 1 }).escape(),
 body('genre.*').escape(),
 
-// Process request after validation and sanitization.
+// // Process request after validation and sanitization.
 (req, res, next) => {
 
     // Extract the validation errors from a request.
@@ -334,7 +357,7 @@ body('genre.*').escape(),
         summary: req.body.summary,
         isbn: req.body.isbn,
         genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
-        _id:req.params.id //This is required, or a new ID will be assigned!
+        id:req.params.id //This is required, or a new ID will be assigned!
     });
 
     if (!errors.isEmpty()) {
@@ -342,35 +365,55 @@ body('genre.*').escape(),
 
         // Get all authors and genres for form.
         async.parallel({
+
             authors: function(callback) {
-                Author.find(callback);
+                // Author.find(callback);
+                // Author.findAll().then(function(value) {callback(null, value);},function(err){callback(err);});
+                Author.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
             },
             genres: function(callback) {
-                Genre.find(callback);
+                // Genre.find(callback);
+                // Genre.findAll().then(function(value) {callback(null, value);},function(err){callback(err);});
+                Genre.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
             },
-        }, function(err, results) {
+        },
+         function(err, results) {
             if (err) { return next(err); }
 
             // Mark our selected genres as checked.
             for (let i = 0; i < results.genres.length; i++) {
-                if (book.genre.indexOf(results.genres[i]._id) > -1) {
+                if (book.genre.indexOf(results.genres[i].id) > -1) {
                     results.genres[i].checked='true';
                 }
             }
-            // res.render('book_form', { title: 'Update Book',authors: results.authors, genres: results.genres, book: book, errors: errors.array() });
-            res.send('now accessing new function!!')
+            res.render('book_form', { title: 'Update Book',author: results.authors, genres: results.genres, book: book, errors: errors.array() });
+            
         });
         return;
     }
     else {
         // Data from form is valid. Update the record.
-        Book.findByIdAndUpdate(req.params.id, book, {}, function (err,thebook) {
-            if (err) { return next(err); }
-               // Successful - redirect to book detail page.
-               res.redirect(thebook.url);
-           });
+
+         Book.update(
+         {
+        title: req.body.title,
+        author: req.body.author,
+        summary: req.body.summary,
+        isbn: req.body.isbn,
+        genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
+        id:req.params.id //This is required, or a new ID will be assigned!
+
+         },{
+            where: {id:req.params.id}
+        }).then(count => {res.redirect('/catalog/book/'+ req.params.id)});
+
+        // Book.update(req.params.id, book, {}, function (err,thebook) {
+        //     // if (err) { return next(err); }
+        //        // Successful - redirect to book detail page.
+        //        res.send("saved hope")
+        //        // res.redirect(thebook.url);
+        //    });
     }
 }
 ];
 
-// genre not showing in pug file 

@@ -2,6 +2,7 @@ extends layout
 
 block content
   h1= title
+  // creating book and updating
 
   form(method='POST' action='')
     div.form-group
@@ -12,12 +13,15 @@ block content
     div.form-group
       label(for='author') Author:
       select#author.form-control(type='select', placeholder='Select author' name='author' required='true')
-       - author.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+       // - author.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
 
        for author_list in author
         - var name = author_list.family_name+', '+author_list.first_name
         if book
-          option(value=author_list.first_name selected=(author_list.id.toString()===book.id.toString() ? 'selected' : false )) #{name}
+          
+          if !isNaN(author_list.id)
+            - console.log(author_list.id+' ->')
+            option(value=name selected=(author_list.id.toString()===book.id.toString() ? 'selected' : false )) #{name}
         else
           option(value=name) #{name}
 

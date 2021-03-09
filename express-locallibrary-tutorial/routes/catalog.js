@@ -53,7 +53,6 @@ router.get('/author/:id/delete', author_controller.author_delete_get);
 // // POST request to delete Author.
 router.post('/author/:id/delete', author_controller.author_delete_post);
 
-
 // // GET request to update Author.
 router.get('/author/:id/update', author_controller.author_update_get);
 
@@ -110,7 +109,7 @@ router.post('/bookinstance/create', book_instance_controller.bookinstance_create
 // // POST request to delete BookInstance.
 // router.post('/bookinstance/:id/delete', book_instance_controller.bookinstance_delete_post);
 
-// // GET request to update BookInstance.
+// GET request to update BookInstance.
 // router.get('/bookinstance/:id/update', book_instance_controller.bookinstance_update_get);
 
 // // POST request to update BookInstance.

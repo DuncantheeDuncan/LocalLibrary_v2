@@ -69,15 +69,14 @@ exports.genre_detail = function(req, res, next) {
 
 
 
-// Display Genre create form on GET. -
-exports.genre_create_get = function(req, res, next) {
+// Display Genre create form on GET. 
+exports.genre_create_get = function(req, res, next) {//-
     res.render('genre_form', { title: 'Create Genre'});
 };
 
-// Handle Genre create on POST. LAST STOP
-exports.genre_create_post = [
-
-    // Validate and santise the name field.
+// Handle Genre create on POST. 
+exports.genre_create_post = [//-
+// Validate and santise the name field.
     body('name', 'Genre name must contain at least 3 characters').trim().isLength({ min: 3 }).escape(),
 
     // Process request after validation and sanitization.
@@ -86,128 +85,47 @@ exports.genre_create_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-       if (!errors.isEmpty()) {
+        
+     // Create a genre object with escaped and trimmed data.
+        var genre = new Genre(
+          { name: req.body.name }
+        );
+
+        if (!errors.isEmpty()) {
             // There are errors. Render the form again with sanitized values/error messages.
             res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array()});
         return;
         }
-        else{
-        	var genre = new Genre({ name: req.body.name });
-
-        	Genre.findAll(
-            {
-            // // limit: 1,
-            where: {name: req.body.name},
-            // // order: [ [ 'createdAt', 'DESC' ]]
-            }
-            ).then(function(err,found_genre) {
-           // console.log('ddd '+  req.body.name +' - '+ found_genre===null)
-            if (err) { /*console.log(err)*/return next(err); }//
-            // console.log('X X '+ err);
-            console.log('X '+found_genre.length);
-
-            for(var i=0;i<found_genre.length;i++){
-            	console.log('cc '+found_genre[i])
-            }
-
-
-            if (found_genre) {
-            	console.log('found genre ')
-
-            }else{
-            	console.log('no gnere found genre ')
-            	// res.redirect('/catalog/genre/'+req.body.id);
-
-            }
-            	
-
-     // Genre.destroy({where:{'name':genre.name}}).then(function(){res.redirect('/catalog/authors')})
-
-            });
-
-        	// genre.save().then(function(){
-        	// 	res.redirect('/catalog/genre/'+genre.id);
-        	// 	console.log('XXX '+genre.name)
-
-        	
-        		
-        	// })
-
-        }
-
-        // Create a genre object with escaped and trimmed data.
-        
-
-
-        // if (!errors.isEmpty()) {
-        //     // There are errors. Render the form again with sanitized values/error messages.
-        //     res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array()});
-        // return;
-        // }
-        // else {
-
-
+        else {
             // Data from form is valid.
             // Check if Genre with same name already exists.
-            // Genre.findAll({where:{ 'name': req.body.name }})
-            //     .exec( function(err, found_genre) {
-            //          if (err) { return next(err); }
 
-            //          if (found_genre) {
-            //              // Genre exists, redirect to its detail page.
-            //              res.redirect(found_genre.url);
-            //          }
-            //          else {
+            Genre.findAll().then(function(genre_list){
+                console.log('length '+ genre_list.length)
+                for(let i=0;i <genre_list.length;i++){
 
-                         // genre.save(function (err) {
-                         //   if (err) { return next(err); }
-                         //   // Genre saved. Redirect to genre detail page.
-                         //   // res.redirect('catalog/genre/');
-                         //   res.send('saved')
-                         // });
+                    if (req.body.name.toUpperCase() === genre_list[i].name.toUpperCase()) {
+                        res.redirect('/catalog/genre/'+genre_list[i].id);
+                    }else{
 
-            //          }
+                        if (i == genre_list.length - 1)
+                            genre.save().then(function(){res.redirect('/catalog/genre/'+genre.id);})
 
-            //      });
+                    }
+                }
+                
+             
 
-            // Genre.findAll(
-            // {
-            // // limit: 1,
-            // where: {'name': req.body.name},
-            // // order: [ [ 'createdAt', 'DESC' ]]
-            // }
-            // ).then(function(err,found_genre) {
-            // 	// if (err) { console.log( err);return next(err); }
-            // 	// console.log('id 2'+ found_genre[0].name)
+              
+            });
 
-            // 	if (found_genre) {
-            //              // Genre exists, redirect to its detail page.
-            //              // console.log('id '+ found_genre.name)
-            //              // res.redirect('/catalog/genre/'+found_genre[0].id);
-            //              res.redirect('/catalog/genres/');
-            //                          // res.send('saved')
-            //          }
-            //          else{
-            //          	 genre.save().then(function () {
-            //       // console.log('ISSSSS '+ genre[genre.length -1].id);
-            //          	 	// catalog.log('Id '+genre.id);
-            //                // if (err) { return next(err); }
-            //                // Genre saved. Redirect to genre detail page.
-            //                // res.redirect('catalog/genre/');
-            //                // res.send('saved')
-            //                 res.redirect('/catalog/genres/');
-            //              });
-            //          }
-        
-            // }); 
-
-        // }
+        }
     }
 ];
 
 
 // // Display Genre delete form on GET.
-exports.genre_delete_get = function(req, res, next) {
+exports.genre_delete_get = function(req, res, next) {//-
 
     async.parallel({
         genre: function(callback) {
@@ -230,7 +148,7 @@ exports.genre_delete_get = function(req, res, next) {
 };
 
 // // Handle Genre delete on POST.
-exports.genre_delete_post = function(req, res, next) {
+exports.genre_delete_post = function(req, res, next) {//-
 
     async.parallel({
         genre: function(callback) {
@@ -244,18 +162,22 @@ exports.genre_delete_post = function(req, res, next) {
     }, function(err, results) {
         if (err) { return next(err); }
         // Success
-        if (results.genre_books==null) {
+        if (results.genre_books!=null) {
+            
             // Genre has books. Render in same way as for GET route.
             res.render('genre_delete', { title: 'Delete Genre', genre: results.genre, genre_books: results.genre_books } );
             return;
         }
         else {
+            console.log('enters')
             // Genre has no books. Delete object and redirect to the list of genres.
             // Genre.findByIdAndRemove(req.body.id, function deleteGenre(err) {
             	Genre.destroy({where:{id:req.params.id}}).then(function(){
-                if (err) { return next(err); }
+                // if (err) { return next(err); }
                 // Success - go to genres list.
                 res.redirect('/catalog/genres');
+                
+                // res.send('woooow')
             });
 
         }

@@ -200,30 +200,33 @@ exports.bookinstance_create_post = [
 //         res.redirect('/catalog/bookinstances');
 //       };
 
-// // Display BookInstance update form on GET.
-// exports.bookinstance_update_get = function(req, res, next) {
 
-//     // Get book, authors and genres for form.
-//     async.parallel({
-//       bookinstance: function(callback) {
-//         BookInstance.findById(req.params.id).populate('book').exec(callback)
-//       },
-//       books: function(callback) {
-//         Book.find(callback)
-//       },
 
-//     }, function(err, results) {
-//       if (err) { return next(err); }
-//             if (results.bookinstance==null) { // No results.
-//               var err = new Error('Book copy not found');
-//               err.status = 404;
-//               return next(err);
-//             }
-//             // Success.
-//             res.render('bookinstance_form', { title: 'Update  BookInstance', book_list : results.books, selected_book : results.bookinstance.book._id, bookinstance:results.bookinstance });
-//           });
+// Display BookInstance update form on GET.
+exports.bookinstance_update_get = function(req, res, next) {
+res.send('bookinstance_update_get')
+    // Get book, authors and genres for form.
+    // async.parallel({
+    //   bookinstance: function(callback) {
+    //     BookInstance.findById(req.params.id).populate('book').exec(callback)
+    //   },
+    //   books: function(callback) {
+    //     Book.find(callback)
+    //   },
 
-//   };
+    // }, function(err, results) {
+    //   if (err) { return next(err); }
+    //         if (results.bookinstance==null) { // No results.
+    //           var err = new Error('Book copy not found');
+    //           err.status = 404;
+    //           return next(err);
+    //         }
+    //         // Success.
+    //         res.render('bookinstance_form', { title: 'Update  BookInstance', book_list : results.books, selected_book : results.bookinstance.book._id, bookinstance:results.bookinstance });
+    //       });
+  };
+
+
 
 // // Handle BookInstance update on POST.
 // exports.bookinstance_update_post = [

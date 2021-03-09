@@ -5,13 +5,20 @@ block content
   h1 #{title}: #{book.title}
   
   p #[strong Author:] 
-    a(href=book.author.url) #{book.author.name}
+    a(href=book.author.url) #{book.author}
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
-  p #[strong Genre:] 
+
+  - let genre_name='';
     each val in book.genre
-      a(href=val.url) #{val.name}
-      |, 
+      - genre_name += val.replace(/[}:{'"]+/g, '')
+
+  p #[strong Genre:]
+    - let genre_names = genre_name.split(',');
+    - for(let i=0; i<genre_names.length; i++)
+        a(href='/catalog/genre/'+book.id) #{genre_names[i].replace(- 1)}   
+        |,
+
 
   hr
   
@@ -42,6 +49,6 @@ block content
     
     form(method='POST' action='')
       div.form-group
-        input#id.form-control(type='hidden',name='id', required='true', value=book._id )
+        input#id.form-control(type='hidden',name='id', required='true', value=book.id )
 
       button.btn.btn-primary(type='submit') Delete
