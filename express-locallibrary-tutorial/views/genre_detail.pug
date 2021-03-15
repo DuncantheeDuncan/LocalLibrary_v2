@@ -11,9 +11,13 @@ block content
     dl
     if genre_books !== null
       each book in genre_books
+        if book.title == null
+            - break
         dt 
           a(href='/catalog/book/'+book.id) #{book.title}
         dd #{book.summary}
+        if book.title == book.title
+          - break
     else
       p This genre has no books.
       

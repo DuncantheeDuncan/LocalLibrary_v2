@@ -7,8 +7,8 @@
   var Author = models.Author;
   var Book = models.Book;
 
-  // Display list of all Authors. -
-  exports.author_list = function(req, res, next) {
+  // Display list of all Authors. 
+  exports.author_list = function(req, res, next) {//-
     Author.findAll().then(function(author_list){
       res.render('author_list',{
         title:'Author List',
@@ -17,15 +17,13 @@
     });
   };
 
-  // Display detail page for a specific Author. -
-  exports.author_detail = function(req, res, next) {
+  // Display detail page for a specific Author.
+  exports.author_detail = function(req, res, next) {//-
     async.parallel({
       author: function(callback) {
         Author.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
       },
-
       author_books: function(callback){
-        // Book.findOne({where:{author: req.params.id }},'title summary').then(function(value){callback(null,value);},function(err){callback(err)})
         Book.findByPk(req.params.id).then(function(value){callback(null,value);},function(err){callback(err)});
       }
     },
@@ -39,18 +37,17 @@
           }
 
           // Successful, so render.
-          console.log('check '+results.author_books)
           res.render('author_detail', {author: results.author, authors_books: results.author_books });
         });
   };
 
-  // Display Author create form on GET. -
-  exports.author_create_get = function(req, res, next) {
+  // Display Author create form on GET.
+  exports.author_create_get = function(req, res, next) {//-
     res.render('author_form', { title: 'Create Author'});
   };
 
-  // Display Author delete form on GET. -
-  exports.author_delete_get = function(req, res, next) {
+  // Display Author delete form on GET.
+  exports.author_delete_get = function(req, res, next) {//-
     async.parallel({
       author: function(callback) {
         Author.findByPk(req.params.id).then(function(value) {callback(null, value);},function(err){callback(err);});
@@ -69,8 +66,8 @@
         });
   };
 
-  // Handle Author delete on POST. -
-  exports.author_delete_post = function(req, res, next) {
+  // Handle Author delete on POST.
+  exports.author_delete_post = function(req, res, next) {//-
     async.parallel({
       author: function(callback) {
         Author.findByPk(/*req.params.id*/req.body.authorid).then(function(value) {callback(null, value);},function(err){callback(err);});
@@ -81,7 +78,6 @@
     }, function(err, results) {
       if (err) { return next(err); }
           // Success
-          
           if (results.authors_books =null) {
               // Author has books. Render in same way as for GET route.
               res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: results.authors_books } );
@@ -97,7 +93,7 @@
   };
 
   // Display Author update form on GET.
-  exports.author_update_get = function (req, res, next) {
+  exports.author_update_get = function (req, res, next) {//-
     Author.findByPk(req.params.id).then(author => {
      if (err) { return next(err); }
 
@@ -110,8 +106,8 @@
     })
   };
 
-  // Handle Author create on POST. -
-  exports.author_create_post = [
+  // Handle Author create on POST. 
+  exports.author_create_post = [//-
       // Validate and sanitise fields.
       body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
       .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
@@ -148,8 +144,8 @@
           }
           ];
 
-  // Handle Author update on POST. - Dates from input
-  exports.author_update_post = [// LAST STOP
+  // Handle Author update on POST.
+  exports.author_update_post = [//-
       // Validate and santize fields.
       body('first_name').trim().isLength({ min: 1 }).escape().withMessage('First name must be specified.')
       .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),

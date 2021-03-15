@@ -24,13 +24,16 @@ block content
 
   
   div(style='margin-left:20px;margin-top:20px')
-    h4 Copies STILL NEED TO FIX THE LOOP!
+    h4 Copies
 
     if book_instances === null
       p There are no copies of this book in the library.
 
     else
-      each val, index in book_instances
+      each val in book_instances
+        if val.imprint == null
+          - break
+
         hr
         if val.status=='Available'
           p.text-success #{val.status}
@@ -39,25 +42,19 @@ block content
 
         else
           p.text-warning #{val.status}
-      
+    
+        p #[strong Imprint:] #{val.imprint} 
+        if val.status !='Available'
+          p #[strong Due back:] #{val.due_back}
+        p #[strong Id:]
+          a(href='/catalog/bookinstance/') #{val.id}
 
-    //- else
-    //-   each val, index in book_instances
-    //-     hr
-    //-     if val.status=='Available'
-    //-       p.text-success #{val.status}
+        if val.imprint == val.imprint
+          - break
 
-    //-     else if val.status=='Maintenance'
-    //-       p.text-danger #{val.status}
 
-    //-     else
-    //-       p.text-warning #{val.status}
 
-    //-     p #[strong Imprint:] #{val.imprint}
-    //-     if val.status!='Available'
-    //-       p #[strong Due back:] #{val.due_back}
-    //-     p #[strong Id:]
-    //-       a(href='/catalog/bookinstance/') #{val.id}
+
 
         
 
