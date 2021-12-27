@@ -109,7 +109,7 @@ async.parallel({
 };
 
 // Handle Genre delete on POST.
-exports.genre_delete_post = function(req, res, next) {//-
+exports.genre_delete_post = function(req, res, next) {
 
 async.parallel({
     genre: function(callback) {
@@ -179,7 +179,7 @@ if (!errors.isEmpty()) {
         return;
     }
     else {
-        
+
         Genre.update(
         {
         	name:req.body.name
